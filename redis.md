@@ -298,3 +298,67 @@ OK
 (integer) 1
 ```
 
+###### 扩展操作
+
+获取哈希表中所有字段名/值
+
+- hkeys key
+
+```
+127.0.0.1:6379> hkeys ad
+1) "name"
+2) "age"
+3) "info"
+```
+
+- hvals key
+
+- ```
+  127.0.0.1:6379> hvals ad
+  1) "tom"
+  2) "23"
+  3) "isnotstudy"
+  ```
+
+设置指定字段的数值数据增加指定范围的值
+
+hincrby key field increment
+
+```
+127.0.0.1:6379> hincrby ad age 4
+(integer) 27
+```
+
+hincrbyfloat key field increment
+
+```
+127.0.0.1:6379> hincrbyfloat ad age 4.59
+"31.59"
+```
+
+特殊添加---有该属性不添加，没有则添加
+
+hsetnx key field value
+
+```
+127.0.0.1:6379> hsetnx bb name tom1
+(integer) 0
+127.0.0.1:6379> hsetnx bb sex gitl
+(integer) 1
+127.0.0.1:6379> hgetall bb
+1) "name"
+2) "tom"
+3) "age"
+4) "23"
+5) "info"
+6) "{....}"
+7) "sex"
+8) "gitl"
+```
+
+###### 注意事项
+
+1. hash类型下的value只能存储字符串，不允许存储其他数据类型，不存在谋套现象。如果数据未获取到，对应的值为(nil)
+2. 每个hash可以存储232-1个键值对
+3. hash类型十分贴近对象的数据存储形式，并且可以灵活添加删除对象属性。但hash设计初圳不是为了存储大量对象而设计的，切记不可滥用，更不可以将hash作为对象列表使用
+4. hgetall操作可以获取全部属性，如果内部field过多，饥历整体数据效率就很会低，有可能成为数据访问瓶颈
